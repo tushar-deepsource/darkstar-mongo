@@ -1,7 +1,7 @@
 from app.context import get_context
 from dotenv import load_dotenv
 from rich import print
-from app.cdb.entities.sc_repository import SecurityCenterRepositories
+from app.business_objects.repositories.sc_repository import SecurityCenterRepositories
 
 
 def main():

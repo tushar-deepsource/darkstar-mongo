@@ -1,18 +1,18 @@
 from typing import List
-from app.cdb.repository import HeimdallEntityRepository
+from app.business_objects.repository import EntityRepository
 
 
 # =========================================================
-# CLASS VULNERABILITIES
+# CLASS BENCHMARKS
 # =========================================================
-class Vulnerabilities(HeimdallEntityRepository):
+class SecurityCenterRepositories(EntityRepository):
 
     # -----------------------------------------------------
     # CONSTRUCTOR
     # -----------------------------------------------------
     def __init__(self):
         super().__init__(
-            collection_name='vulnerabilities'
+            collection_name='sc_repositories'
         )
 
     # -----------------------------------------------------
@@ -20,12 +20,12 @@ class Vulnerabilities(HeimdallEntityRepository):
     # -----------------------------------------------------
     def get_index_fields(self) -> List[str]:
         return [
-            'id'
+            'repository_id'
         ]
 
 
 # =========================================================
-# FUNCTION INJECT VULNERABILITIES
+# FUNCTION INJECT SECURITY CENTER REPOSITORIES
 # =========================================================
-def inject_vulnerabilities() -> Vulnerabilities:
-    return Vulnerabilities()
+def inject_security_center_repositories() -> SecurityCenterRepositories:
+    return SecurityCenterRepositories()

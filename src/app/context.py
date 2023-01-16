@@ -15,10 +15,10 @@ disable_warnings(InsecureRequestWarning)
 # ---------------------------------------------------------
 # CLASS HEIMDALL SERVER SETTINGS
 # ---------------------------------------------------------
-class HeimdallServerContext(Confite):
+class ServerContext(Confite):
 
     """
-    Heimdall Server Context is the top level implementation
+    Server Context is the top level implementation
     of a parameter object that implement the Flyweight design
     pattern to help sharing settings and connection resources
     across the application by exposing them as properties
@@ -129,9 +129,9 @@ class HeimdallServerContext(Confite):
 # ---------------------------------------------------------
 # METHOD GET SETTINGS
 # ---------------------------------------------------------
-def get_context() -> HeimdallServerContext:
+def get_context() -> ServerContext:
     load_dotenv()
-    return HeimdallServerContext(
+    return ServerContext(
         [
             'MONGO_USER',
             'MONGO_PASSWORD',
@@ -139,9 +139,9 @@ def get_context() -> HeimdallServerContext:
             'MONGO_DB',
             'MONGO_PORT',
             'MONGO_TLS_CONNECTION',
-            # 'W3ID_DISCOVERY_ENDPOINT',
-            # 'W3ID_CLIENT_ID',
-            # 'W3ID_CLIENT_SECRET',
+            # 'OIDC_DISCOVERY_ENDPOINT',
+            # 'OIDC_CLIENT_ID',
+            # 'OIDC_CLIENT_SECRET',
             'SESSION_MIDDLEWARE_KEY',
             'API_VERSION',
             'QUERY_LIMIT',

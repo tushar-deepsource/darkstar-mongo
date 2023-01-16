@@ -21,7 +21,7 @@ from pymongo.errors import (
     WriteConcernError
 )
 
-from app.context import get_context, HeimdallServerContext
+from app.context import get_context, ServerContext
 from app.types.core import IssueStatus
 import functools
 
@@ -114,13 +114,13 @@ def inject_mongodb_error_handling(func):
 # =========================================================
 # CLASS HEIMDALL ENTITY REPOSITORY
 # =========================================================
-class HeimdallEntityRepository(object):
+class EntityRepository(object):
     __metaclass__ = ABCMeta
 
     def __init__(
             self,
             collection_name: str,
-            context: HeimdallServerContext = get_context()
+            context: ServerContext = get_context()
     ):
         """
         VAPControlDBService is not designed to be instantiated
@@ -136,7 +136,7 @@ class HeimdallEntityRepository(object):
         self.db = context.database
         self.entities = self.db[collection_name]
         self.collection_name = collection_name
-        self.context: HeimdallServerContext = context
+        self.context: ServerContext = context
 
     # -----------------------------------------------------
     # TRAVERSE CURSOR AND COPY

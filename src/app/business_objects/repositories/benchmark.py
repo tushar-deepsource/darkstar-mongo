@@ -1,12 +1,12 @@
 from typing import List
 
-from app.cdb.repository import HeimdallEntityRepository
+from app.business_objects.repository import EntityRepository
 
 
 # =========================================================
 # CLASS BENCHMARKS
 # =========================================================
-class Benchmarks(HeimdallEntityRepository):
+class Benchmarks(EntityRepository):
 
     # -----------------------------------------------------
     # CONSTRUCTOR

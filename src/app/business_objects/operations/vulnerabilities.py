@@ -1,6 +1,6 @@
 from typing import List
 
-from app.cdb.entities.vulnerability import Vulnerabilities
+from app.business_objects.repositories.vulnerability import Vulnerabilities
 from app.models.vulnerability_operations import VulnerabilityJiraIssueList, BulkTransitionResponseBasedOnJiraIDs, \
     ControlDBStatusPerJiraIssue
 from app.types.core import IssueStatus
