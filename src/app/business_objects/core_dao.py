@@ -96,12 +96,12 @@ def inject_mongodb_error_handling(func):
         except PyMongoError as pymongo_error:
             print("Error ID: 16")
             logging.error(str(pymongo_error))
-        except WriteError as write_error:
-            print("Error ID: 17")
-            logging.error(str(write_error))
         except WriteConcernError as write_concern_error:
-            print("Error ID: 18")
+            print("Error ID: 17")
             logging.error(str(write_concern_error))
+        except WriteError as write_error:
+            print("Error ID: 18")
+            logging.error(str(write_error))
         except Exception as error:
             print(f"Error ID: 19 {error}")
             logging.error(str(error))
