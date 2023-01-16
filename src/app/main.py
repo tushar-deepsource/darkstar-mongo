@@ -2,11 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.context import get_context
-from app.endpoints import (
-    benchmark,
-    vulnerability
-)
-
+from app.resources.members.endpoints import router as members_router
 
 # -----------------------------------------------------------------------------
 # Instance of FastAPI Application
@@ -44,11 +40,8 @@ app.add_middleware(
     secret_key=get_context().middleware_key
 )
 
+# Members Router Inclusion
 app.include_router(
-    benchmark.router,
-    prefix=f"/api/{get_context().as_str('API_VERSION')}"
-)
-app.include_router(
-    vulnerability.router,
+    members_router,
     prefix=f"/api/{get_context().as_str('API_VERSION')}"
 )
