@@ -1,11 +1,11 @@
 from typing import List
-from app.business_objects.repository import EntityRepository
+from app.business_objects.core_dao import EntityRepository
 
 
 # =========================================================
-# CLASS USER_REPOSITORY
+# CLASS MEMBERS
 # =========================================================
-class Users(EntityRepository):
+class Members(EntityRepository):
 
     # -----------------------------------------------------
     # CONSTRUCTOR
@@ -28,5 +28,5 @@ class Users(EntityRepository):
 # =========================================================
 # FUNCTION INJECT USERS
 # =========================================================
-def inject_vulnerabilities() -> Users:
-    return Users()
+def inject_vulnerabilities() -> Members:
+    return Members()

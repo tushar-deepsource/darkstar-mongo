@@ -125,7 +125,7 @@ class EntityRepository(object):
         """
         VAPControlDBService is not designed to be instantiated
         directly because it is an abstract class. This class
-        provides a set of generic operations on top of VAPs
+        provides a set of generic _operations on top of VAPs
         ControlDB. Specific actions should be implemented in
         classes that extend this class.
 

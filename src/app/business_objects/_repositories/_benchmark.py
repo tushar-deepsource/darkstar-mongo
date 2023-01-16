@@ -1,18 +1,19 @@
 from typing import List
-from app.business_objects.repository import EntityRepository
+
+from app.business_objects.core_dao import EntityRepository
 
 
 # =========================================================
-# CLASS VULNERABILITIES
+# CLASS BENCHMARKS
 # =========================================================
-class Vulnerabilities(EntityRepository):
+class Benchmarks(EntityRepository):
 
     # -----------------------------------------------------
     # CONSTRUCTOR
     # -----------------------------------------------------
     def __init__(self):
         super().__init__(
-            collection_name='vulnerabilities'
+            collection_name='benchmarks'
         )
 
     # -----------------------------------------------------
@@ -25,7 +26,7 @@ class Vulnerabilities(EntityRepository):
 
 
 # =========================================================
-# FUNCTION INJECT VULNERABILITIES
+# FUNCTION INJECT BENCHMARKS
 # =========================================================
-def inject_vulnerabilities() -> Vulnerabilities:
-    return Vulnerabilities()
+def inject_benchmarks() -> Benchmarks:
+    return Benchmarks()

@@ -7,20 +7,20 @@ router = APIRouter()
 # =========================================================
 # GET USER BY ID
 # =========================================================
-@router.get('/user/{user_id}')
-def get_user_by_id(
-        user_id: UUID
+@router.get('/member/{member_id}')
+def get_member_by_id(
+        member_id: UUID
 ):
-    if not user_id:
+    if not member_id:
         raise HTTPException(
             status_code=400,
-            detail='You must provide a valid user_id'
+            detail='You must provide a valid member_id'
         )
 
 
 # =========================================================
 # LIST USERS
 # =========================================================
-@router.get('/users')
-def list_users():
+@router.get('/member')
+def list_members():
     return []

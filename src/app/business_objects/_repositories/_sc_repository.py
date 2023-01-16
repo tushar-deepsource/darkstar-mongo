@@ -1,19 +1,18 @@
 from typing import List
-
-from app.business_objects.repository import EntityRepository
+from app.business_objects.core_dao import EntityRepository
 
 
 # =========================================================
 # CLASS BENCHMARKS
 # =========================================================
-class Benchmarks(EntityRepository):
+class SecurityCenterRepositories(EntityRepository):
 
     # -----------------------------------------------------
     # CONSTRUCTOR
     # -----------------------------------------------------
     def __init__(self):
         super().__init__(
-            collection_name='benchmarks'
+            collection_name='sc_repositories'
         )
 
     # -----------------------------------------------------
@@ -21,12 +20,12 @@ class Benchmarks(EntityRepository):
     # -----------------------------------------------------
     def get_index_fields(self) -> List[str]:
         return [
-            'id'
+            'repository_id'
         ]
 
 
 # =========================================================
-# FUNCTION INJECT BENCHMARKS
+# FUNCTION INJECT SECURITY CENTER REPOSITORIES
 # =========================================================
-def inject_benchmarks() -> Benchmarks:
-    return Benchmarks()
+def inject_security_center_repositories() -> SecurityCenterRepositories:
+    return SecurityCenterRepositories()

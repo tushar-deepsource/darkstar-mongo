@@ -1,5 +1,5 @@
 from typing import Dict
-from app.models import HeimdallModel
+from app._models import HeimdallModel
 
 
 # =========================================================

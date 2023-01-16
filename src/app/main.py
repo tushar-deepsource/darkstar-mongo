@@ -12,13 +12,9 @@ from app.endpoints import (
 # Instance of FastAPI Application
 # -----------------------------------------------------------------------------
 app = FastAPI(
-    title="Vulnerability Automation Platform - Heimdall API",
-    description="Heimdall is a Vulnerability "
-                "Management Platform designed to be"
-                "highly scalable, flexible and "
-                "capable of managing and tracking "
-                "vulnerabilities in real time ",
-    version="0.1.0",
+    title="DarkStar REST API",
+    description="More description will be added soon",
+    version="1.0.0",
     openapi_url="/openapi.json",
     docs_url="/",
     redoc_url=None

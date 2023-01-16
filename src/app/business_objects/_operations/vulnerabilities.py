@@ -1,7 +1,7 @@
 from typing import List
 
-from app.business_objects.repositories.vulnerability import Vulnerabilities
-from app.models.vulnerability_operations import VulnerabilityJiraIssueList, BulkTransitionResponseBasedOnJiraIDs, \
+from app.business_objects.repositories._vulnerability import Vulnerabilities
+from app._models.vulnerability_operations import VulnerabilityJiraIssueList, BulkTransitionResponseBasedOnJiraIDs, \
     ControlDBStatusPerJiraIssue
 from app.types.core import IssueStatus
 
