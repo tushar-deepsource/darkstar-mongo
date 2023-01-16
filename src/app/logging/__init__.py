@@ -79,11 +79,8 @@ class LogEvent(object):
     # METHOD STR
     # -------------------------------------------------------------------------
     def __str__(self) -> str:
-        return "[{level}: {utc_datetime}]: {message}".format(
-            level=self._level.name,
-            utc_datetime=str(self._utc_datetime),
-            message=self._message
-        )
+        return f"[{self._level.name}: " \
+               f"{str(self._utc_datetime)}]: {self._message}"
 
 
 # -----------------------------------------------------------------------------
