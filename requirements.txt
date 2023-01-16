@@ -1,0 +1,6 @@
+fastapi
+pymongo
+rich
+confite
+requests
+jira
