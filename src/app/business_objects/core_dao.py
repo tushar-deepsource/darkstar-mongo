@@ -18,7 +18,7 @@ from pymongo.errors import (
     NetworkTimeout,
     PyMongoError,
     WriteError,
-    WriteConcernError
+    WriteConcernError,
 )
 
 from app.context import get_context, ServerContext
@@ -31,13 +31,13 @@ import functools
 # =========================================================
 def inject_mongodb_error_handling(func):
     """
-        Decorator that centralizes and provides proper error
-        handling and logging for every single Mongo operation
-        without duplicating error handling code across  all
-        service methods
-        :param func: functions to be wrapped
-        :return:
-        """
+    Decorator that centralizes and provides proper error
+    handling and logging for every single Mongo operation
+    without duplicating error handling code across  all
+    service methods
+    :param func: functions to be wrapped
+    :return:
+    """
     logging = get_context().logging
 
     @functools.wraps(func)
@@ -46,68 +46,67 @@ def inject_mongodb_error_handling(func):
             return func(*args, **kwargs)
 
         except IndexError as ie:
-            print(f"Error ID: 1")
-            logging.error(
-                'Unable to find document'
-            )
+            print("Error ID: 1")
+            logging.error("Unable to find document")
             logging.error(str(ie))
         except NetworkTimeout as nt:
-            print(f"Error ID: 2")
+            print("Error ID: 2")
             logging.error(str(nt))
         except AutoReconnect as ar:
-            print(f"Error ID: 3")
+            print("Error ID: 3")
             logging.error(str(ar))
         except BulkWriteError as bwe:
-            print(f"Error ID: 4")
+            print("Error ID: 4")
             if bwe.timeout:
                 logging.error(str(bwe))
             logging.error(str(bwe))
         except CollectionInvalid as collection_invalid_error:
-            print(f"Error ID: 5")
+            print("Error ID: 5")
             logging.error(str(collection_invalid_error))
         except InvalidURI as invalid_url_error:
-            print(f"Error ID: 6")
+            print("Error ID: 6")
             logging.error(str(invalid_url_error))
         except ConfigurationError as configuration_error:
-            print(f"Error ID: 7")
+            print("Error ID: 7")
             logging.error(str(configuration_error))
         except ConnectionFailure as connection_failure_error:
-            print(f"Error ID: 8")
+            print("Error ID: 8")
             logging.error(str(connection_failure_error))
         except CursorNotFound as cursor_not_found_error:
-            print(f"Error ID: 9")
+            print("Error ID: 9")
             logging.error(str(cursor_not_found_error))
         except DocumentTooLarge as document_too_large_error:
-            print(f"Error ID: 10")
+            print("Error ID: 10")
             logging.error(str(document_too_large_error))
         except DuplicateKeyError as duplicated_key_error:
-            print(f"Error ID: 11")
+            print("Error ID: 11")
             logging.error(str(duplicated_key_error))
         except EncryptionError as ece:
-            print(f"Error ID: 12")
+            print("Error ID: 12")
             logging.error(str(ece.cause))
         except ExecutionTimeout as timeout_error:
-            print(f"Error ID: 13")
+            print("Error ID: 13")
             logging.error(str(timeout_error))
         except InvalidName as invalid_name_error:
-            print(f"Error ID: 14")
+            print("Error ID: 14")
             logging.error(str(invalid_name_error))
         except InvalidOperation as invalid_operation_error:
-            print(f"Error ID: 15")
+            print("Error ID: 15")
             logging.error(str(invalid_operation_error))
         except PyMongoError as pymongo_error:
-            print(f"Error ID: 16")
+            print("Error ID: 16")
             logging.error(str(pymongo_error))
         except WriteError as write_error:
-            print(f"Error ID: 17")
+            print("Error ID: 17")
             logging.error(str(write_error))
         except WriteConcernError as write_concern_error:
-            print(f"Error ID: 18")
+            print("Error ID: 18")
             logging.error(str(write_concern_error))
         except Exception as error:
             print(f"Error ID: 19 {error}")
             logging.error(str(error))
         return False
+
     return error_handling_wrapper
 
 
@@ -117,11 +116,7 @@ def inject_mongodb_error_handling(func):
 class EntityRepository(object):
     __metaclass__ = ABCMeta
 
-    def __init__(
-            self,
-            collection_name: str,
-            context: ServerContext = get_context()
-    ):
+    def __init__(self, collection_name: str, context: ServerContext = get_context()):
         """
         VAPControlDBService is not designed to be instantiated
         directly because it is an abstract class. This class
@@ -175,9 +170,7 @@ class EntityRepository(object):
         :return: Local copy of results
         """
         return self.traverse_cursor_and_copy(
-            self.entities.find(query).limit(
-                self.context.query_limit
-            )
+            self.entities.find(query).limit(self.context.query_limit)
         )
 
     # -----------------------------------------------------
@@ -193,11 +186,7 @@ class EntityRepository(object):
         entity
         :return: Dict if entity exists or None if not found
         """
-        return self.get(
-            {
-                'id': issue_id
-            }
-        ).pop()
+        return self.get({"id": issue_id}).pop()
 
     # -----------------------------------------------------
     # METHOD GET BY JIRA ID
@@ -209,21 +198,13 @@ class EntityRepository(object):
         :param jira_id:
         :return:
         """
-        return self.get(
-            {
-                'jira_id': jira_id
-            }
-        ).pop()
+        return self.get({"jira_id": jira_id}).pop()
 
     # -----------------------------------------------------
     # METHOD GET BY JIRA ID
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def get_by_status(
-            self,
-            statuses: List[IssueStatus],
-            query: dict = None
-    ):
+    def get_by_status(self, statuses: List[IssueStatus], query: dict = None):
         if not query:
             query = {}
         query["$and"] = []
@@ -236,9 +217,7 @@ class EntityRepository(object):
     # -----------------------------------------------------
     @inject_mongodb_error_handling
     def get_without_status(
-            self,
-            excluded_statuses: List[IssueStatus],
-            query: dict = None
+        self, excluded_statuses: List[IssueStatus], query: dict = None
     ):
         if not query:
             query = {}
@@ -251,97 +230,48 @@ class EntityRepository(object):
     # METHOD UPDATE ONE
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_one(
-            self,
-            issue_id: str,
-            new_values: dict
-    ):
-        return self.entities.update_one(
-            {
-                'id': issue_id
-            },
-            {
-                '$set': new_values
-            }
-        )
+    def update_one(self, issue_id: str, new_values: dict):
+        return self.entities.update_one({"id": issue_id}, {"$set": new_values})
 
     # -----------------------------------------------------
     # METHOD UPDATE ONE BY JIRA ID
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_one_by_jira_id(
-            self,
-            jira_id: str,
-            new_values: dict
-    ):
-        return self.entities.update_one(
-            {
-                'jira_id': jira_id
-            },
-            {
-                '$set': new_values
-            }
-        )
+    def update_one_by_jira_id(self, jira_id: str, new_values: dict):
+        return self.entities.update_one({"jira_id": jira_id}, {"$set": new_values})
 
     # -----------------------------------------------------
     # METHOD UPDATE MANY
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_many(
-            self,
-            filter_query: dict,
-            new_values: dict
-    ):
-        return self.entities.update_many(
-            filter_query,
-            {
-                '$set': new_values
-            }
-        )
+    def update_many(self, filter_query: dict, new_values: dict):
+        return self.entities.update_many(filter_query, {"$set": new_values})
 
     # -----------------------------------------------------
     # METHOD UPDATE STATUS FOR ONE
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_status_for_one(
-            self,
-            issue_id: str,
-            new_status: IssueStatus
-    ):
+    def update_status_for_one(self, issue_id: str, new_status: IssueStatus):
         return self.update_one(
-            issue_id=issue_id,
-            new_values={
-                'status': str(new_status)
-            }
+            issue_id=issue_id, new_values={"status": str(new_status)}
         )
 
     # -----------------------------------------------------
     # METHOD UPDATE STATUS BY JIRA ID
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_status_by_jira_id(
-            self, jira_id: str,
-            new_status: IssueStatus
-    ):
+    def update_status_by_jira_id(self, jira_id: str, new_status: IssueStatus):
         return self.update_one_by_jira_id(
-            jira_id=jira_id,
-            new_values={
-                'status': str(new_status)
-            }
+            jira_id=jira_id, new_values={"status": str(new_status)}
         )
 
     # -----------------------------------------------------
     # METHOD UPDATE STATUS FOR MANY
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_status_for_many(
-            self,
-            filter_query: dict,
-            new_status: IssueStatus
-    ):
+    def update_status_for_many(self, filter_query: dict, new_status: IssueStatus):
         return self.update_many(
-            filter_query=filter_query,
-            new_values={'status': str(new_status)}
+            filter_query=filter_query, new_values={"status": str(new_status)}
         )
 
     # -----------------------------------------------------
