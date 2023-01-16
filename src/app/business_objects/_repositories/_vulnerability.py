@@ -1,5 +1,5 @@
 from typing import List
-from app.business_objects.core_dao import EntityRepository
+from app.business_objects.core.dao import EntityRepository
 
 
 # =========================================================

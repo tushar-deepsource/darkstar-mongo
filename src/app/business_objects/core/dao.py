@@ -22,7 +22,6 @@ from pymongo.errors import (
 )
 
 from app.context import get_context, ServerContext
-from app.types.core import IssueStatus
 import functools
 
 
@@ -116,13 +115,17 @@ def inject_mongodb_error_handling(func):
 class EntityRepository:
     __metaclass__ = ABCMeta
 
-    def __init__(self, collection_name: str, context: ServerContext = get_context()):
+    def __init__(
+            self,
+            collection_name: str,
+            context: ServerContext = get_context()
+    ):
         """
-        VAPControlDBService is not designed to be instantiated
+        EntityRepository is not designed to be instantiated
         directly because it is an abstract class. This class
-        provides a set of generic _operations on top of VAPs
-        ControlDB. Specific actions should be implemented in
-        classes that extend this class.
+        provides a set of generic _operations on top of
+        Mongo Database Client. Specific actions should
+        be implemented in classes that extend this class.
 
         :param collection_name: Name of the MongoDB Collection
         :param context: Shared worker context that provides access to
@@ -201,78 +204,35 @@ class EntityRepository:
         return self.get({"jira_id": jira_id}).pop()
 
     # -----------------------------------------------------
-    # METHOD GET BY JIRA ID
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def get_by_status(self, statuses: List[IssueStatus], query: dict = None):
-        if not query:
-            query = {}
-        query["$and"] = []
-        for status in statuses:
-            query["$and"].append({"status": str(status)})
-        return self.get(query=query)
-
-    # -----------------------------------------------------
-    # METHOD GET WITHOUT STATUS
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def get_without_status(
-        self, excluded_statuses: List[IssueStatus], query: dict = None
-    ):
-        if not query:
-            query = {}
-        query["$and"] = []
-        for status in excluded_statuses:
-            query["$and"].append({"status": {"$ne": str(status)}})
-        return self.get(query=query)
-
-    # -----------------------------------------------------
     # METHOD UPDATE ONE
     # -----------------------------------------------------
     @inject_mongodb_error_handling
     def update_one(self, issue_id: str, new_values: dict):
-        return self.entities.update_one({"id": issue_id}, {"$set": new_values})
-
-    # -----------------------------------------------------
-    # METHOD UPDATE ONE BY JIRA ID
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def update_one_by_jira_id(self, jira_id: str, new_values: dict):
-        return self.entities.update_one({"jira_id": jira_id}, {"$set": new_values})
+        return self.entities.update_one(
+            {"id": issue_id}, {"$set": new_values}
+        )
 
     # -----------------------------------------------------
     # METHOD UPDATE MANY
     # -----------------------------------------------------
     @inject_mongodb_error_handling
-    def update_many(self, filter_query: dict, new_values: dict):
-        return self.entities.update_many(filter_query, {"$set": new_values})
-
-    # -----------------------------------------------------
-    # METHOD UPDATE STATUS FOR ONE
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def update_status_for_one(self, issue_id: str, new_status: IssueStatus):
-        return self.update_one(
-            issue_id=issue_id, new_values={"status": str(new_status)}
+    def update_many(
+            self,
+            filter_query: dict,
+            new_values: dict
+    ):
+        return self.entities.update_many(
+            filter_query,
+            {"$set": new_values}
         )
 
     # -----------------------------------------------------
-    # METHOD UPDATE STATUS BY JIRA ID
+    # METHOD CREATE
     # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def update_status_by_jira_id(self, jira_id: str, new_status: IssueStatus):
-        return self.update_one_by_jira_id(
-            jira_id=jira_id, new_values={"status": str(new_status)}
-        )
-
-    # -----------------------------------------------------
-    # METHOD UPDATE STATUS FOR MANY
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def update_status_for_many(self, filter_query: dict, new_status: IssueStatus):
-        return self.update_many(
-            filter_query=filter_query, new_values={"status": str(new_status)}
-        )
+    def create(self, values: dict):
+        return self.entities\
+            .insert_one(values)\
+            .inserted_id
 
     # -----------------------------------------------------
     # METHOD GET INDEX FIELDS

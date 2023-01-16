@@ -6,7 +6,7 @@ from app._models.vulnerability_operations import (
     BulkTransitionResponseBasedOnJiraIDs,
     ControlDBStatusPerJiraIssue,
 )
-from app.types.core import IssueStatus
+from app._types.core import IssueStatus
 
 
 # =========================================================
@@ -51,8 +51,6 @@ class BulkTransitionVulnerabilitiesBasedOnJiraIDs:
 # =========================================================
 # CLASS BULK STATUS GET BASED ON JIRA QUERY
 # =========================================================
-
-
 class GetStatusBasedOnMatchesFromJiraQuery:
     def __init__(
         self, issues: VulnerabilityJiraIssueList, vulnerabilities: Vulnerabilities

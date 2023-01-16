@@ -1,5 +1,5 @@
 from typing import List
-from app.business_objects.core_dao import EntityRepository
+from app.business_objects.core.dao import EntityRepository
 
 
 # =========================================================
@@ -24,9 +24,3 @@ class Members(EntityRepository):
             'email'
         ]
 
-
-# =========================================================
-# FUNCTION INJECT USERS
-# =========================================================
-def inject_vulnerabilities() -> Members:
-    return Members()
