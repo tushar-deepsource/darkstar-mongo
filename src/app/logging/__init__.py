@@ -18,7 +18,7 @@ class LogLevel(enum.Enum):
 # -----------------------------------------------------------------------------
 # CLASS LOGGER BASE
 # -----------------------------------------------------------------------------
-class AbstractLogger(object):
+class AbstractLogger:
 
     __metaclass__ = ABCMeta
 
@@ -48,7 +48,7 @@ class AbstractLogger(object):
 # -----------------------------------------------------------------------------
 # CLASS LOG EVENT
 # -----------------------------------------------------------------------------
-class LogEvent(object):
+class LogEvent:
 
     # -------------------------------------------------------------------------
     # CONSTRUCTOR
@@ -70,29 +70,24 @@ class LogEvent(object):
     # -------------------------------------------------------------------------
     def dict(self) -> dict:
         return {
-            'message': self._message,
-            'level': self._level.name,
-            'utc_datetime': self._utc_datetime
+            "message": self._message,
+            "level": self._level.name,
+            "utc_datetime": self._utc_datetime,
         }
 
     # -------------------------------------------------------------------------
     # METHOD STR
     # -------------------------------------------------------------------------
     def __str__(self) -> str:
-        return f"[{self._level.name}: " \
-               f"{str(self._utc_datetime)}]: {self._message}"
+        return f"[{self._level.name}: " f"{str(self._utc_datetime)}]: {self._message}"
 
 
 # -----------------------------------------------------------------------------
 # CLASS SIMPLE LOGGER
 # -----------------------------------------------------------------------------
 class StandardOutputLogger(AbstractLogger):
-
     def __init__(self):
-        logging.getLogger()\
-            .setLevel(
-            logging.DEBUG
-        )
+        logging.getLogger().setLevel(logging.DEBUG)
 
     # -------------------------------------------------------------------------
     # METHOD DEBUG
