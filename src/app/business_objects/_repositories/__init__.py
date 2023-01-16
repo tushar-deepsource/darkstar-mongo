@@ -5,7 +5,7 @@ from app._models import HeimdallModel
 # =========================================================
 # CLASS ENTITY ADAPTER
 # =========================================================
-class EntityAdapter(object):
+class EntityAdapter:
 
     # -----------------------------------------------------
     # CONSTRUCTOR

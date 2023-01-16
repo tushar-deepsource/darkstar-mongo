@@ -9,7 +9,7 @@ from app.types.core import IssueStatus
 # =========================================================
 # CLASS BULK TRANSITION VULNS BASED OIN JIRA IDS
 # =========================================================
-class BulkTransitionVulnerabilitiesBasedOnJiraIDs(object):
+class BulkTransitionVulnerabilitiesBasedOnJiraIDs:
 
     def __init__(
             self,
@@ -53,7 +53,7 @@ class BulkTransitionVulnerabilitiesBasedOnJiraIDs(object):
 # CLASS BULK STATUS GET BASED ON JIRA QUERY
 # =========================================================
 
-class GetStatusBasedOnMatchesFromJiraQuery(object):
+class GetStatusBasedOnMatchesFromJiraQuery:
 
     def __init__(
             self,

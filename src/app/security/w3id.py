@@ -9,7 +9,7 @@ import uuid
 # --------------------------------------------------------
 # GET OR DEFAULT
 # --------------------------------------------------------
-class W3Identity(object):
+class W3Identity:
 
     def __init__(self, user_info: UserInfo):
         self.name: str = self.__get_or_default(user_info.get('name'))

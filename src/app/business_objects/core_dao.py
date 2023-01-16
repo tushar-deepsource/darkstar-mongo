@@ -113,7 +113,7 @@ def inject_mongodb_error_handling(func):
 # =========================================================
 # CLASS HEIMDALL ENTITY REPOSITORY
 # =========================================================
-class EntityRepository(object):
+class EntityRepository:
     __metaclass__ = ABCMeta
 
     def __init__(self, collection_name: str, context: ServerContext = get_context()):

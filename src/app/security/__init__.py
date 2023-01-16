@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 # -------------------------------------------------------------------------
 # CLASS IDENTITY CREDENTIAL
 # -------------------------------------------------------------------------
-class IdentityCredential(object):
+class IdentityCredential:
 
     __metaclass__ = ABCMeta
 
