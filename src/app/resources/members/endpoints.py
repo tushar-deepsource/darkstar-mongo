@@ -9,6 +9,7 @@ from app.business_objects.member import (
 )
 from uuid import UUID
 
+from app.business_objects.member.operations import CreateMemberOperation
 from app.resources.members import MemberCreationRequest
 
 router = APIRouter()
@@ -42,12 +43,18 @@ def list_members(
 # =========================================================
 # CREATE MEMBER
 # =========================================================
-@router.post('/member')
+@router.post(
+    '/member',
+    response_model=MemberCreationRequest
+)
 def create_member(
     member: MemberCreationRequest,
     members: Members = Depends(inject_members)
 ):
-    return
+    return CreateMemberOperation(
+        member=member,
+        members=members
+    ).operation_result
 
 
 # =========================================================
