@@ -8,5 +8,5 @@ RUN apt-get update && apt-get upgrade \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 ENV  PORT 8080
