@@ -121,6 +121,27 @@ class ServerContext(Confite):
         return self.as_str('API_VERSION')
 
     # -----------------------------------------------------
+    # PROPERTY OIDC_CLIENT_ID
+    # -----------------------------------------------------
+    @property
+    def oidc_client_id(self) -> str:
+        return self.as_str('OIDC_CLIENT_ID')
+
+    # -----------------------------------------------------
+    # PROPERTY OIDC_CLIENT_SECRET
+    # -----------------------------------------------------
+    @property
+    def oidc_client_secret(self) -> str:
+        return self.as_str('OIDC_CLIENT_SECRET')
+
+    # -----------------------------------------------------
+    # PROPERTY OIDC_DISCOVERY_ENDPOINT
+    # -----------------------------------------------------
+    @property
+    def oidc_discovery_endpoint(self) -> str:
+        return self.as_str('OIDC_DISCOVERY_ENDPOINT')
+
+    # -----------------------------------------------------
     # PROPERTY QUERY LIMIT
     # -----------------------------------------------------
     @property
@@ -161,9 +182,9 @@ def get_context() -> ServerContext:
             'MONGO_REPLICA_SET',
             'MONGO_CLUSTER',
             'MONGO_SRV',
-            # 'OIDC_DISCOVERY_ENDPOINT',
-            # 'OIDC_CLIENT_ID',
-            # 'OIDC_CLIENT_SECRET',
+            'OIDC_DISCOVERY_ENDPOINT',
+            'OIDC_CLIENT_ID',
+            'OIDC_CLIENT_SECRET',
             'SESSION_MIDDLEWARE_KEY',
             'API_VERSION',
             'QUERY_LIMIT',
