@@ -16,7 +16,6 @@ disable_warnings(InsecureRequestWarning)
 # CLASS HEIMDALL SERVER SETTINGS
 # ---------------------------------------------------------
 class ServerContext(Confite):
-
     """
     Server Context is the top level implementation
     of a parameter object that implement the Flyweight design
@@ -42,6 +41,8 @@ class ServerContext(Confite):
         host: str = self.as_str('MONGO_SERVER')
         db: str = self.as_str('MONGO_DB')
         port: int = self.as_int('MONGO_PORT')
+        if self.as_int('MONGO_SRV') == 1:
+            return f'mongodb+srv://{user}:{pwd}@{host}/{db}'
         return f'mongodb://{user}:{pwd}@{host}:{port}/{db}'
 
     # -----------------------------------------------------
@@ -67,7 +68,7 @@ class ServerContext(Confite):
         print("Connecting without database encryption...")
         return MongoClient(
             self.build_connection_string() +
-            '?authSource=admin'
+            f'?authSource=admin{self.replica_set}'
         )[self.as_str('MONGO_DB')]
 
     # -----------------------------------------------------
@@ -75,10 +76,28 @@ class ServerContext(Confite):
     # -----------------------------------------------------
     @property
     def database_with_tls(self) -> database:
+        print(self.build_connection_string() + f'?authSource=admin{self.replica_set}&tls=true')
         return MongoClient(
             self.build_connection_string() +
-            '?authSource=admin'
+            f'?authSource=admin{self.replica_set}&tls=true'
         )[self.as_str('MONGO_DB')]
+
+    # -----------------------------------------------------
+    # PROPERTY IS_CLUSTER
+    # -----------------------------------------------------
+    @property
+    def is_cluster(self) -> bool:
+        return self.as_int('MONGO_CLUSTER') == 1
+
+    # -----------------------------------------------------
+    # PROPERTY REPLICA SET
+    # -----------------------------------------------------
+    @property
+    def replica_set(self) -> str:
+        replica_set_str = ""
+        if self.is_cluster:
+            replica_set_str = f"&replicaSet={self.as_str('MONGO_REPLICA_SET')}"
+        return replica_set_str
 
     # -----------------------------------------------------
     # PROPERTY LOGGING
@@ -139,13 +158,16 @@ def get_context() -> ServerContext:
             'MONGO_DB',
             'MONGO_PORT',
             'MONGO_TLS_CONNECTION',
+            'MONGO_REPLICA_SET',
+            'MONGO_CLUSTER',
+            'MONGO_SRV',
             # 'OIDC_DISCOVERY_ENDPOINT',
             # 'OIDC_CLIENT_ID',
             # 'OIDC_CLIENT_SECRET',
             'SESSION_MIDDLEWARE_KEY',
             'API_VERSION',
             'QUERY_LIMIT',
-            'LOG_LEVEL',
-            'JIRA_TOKEN'
+            'LOG_LEVEL'
+
         ]
     )
