@@ -14,15 +14,13 @@ app = FastAPI(
     version="1.0.0",
     openapi_url="/openapi.json",
     docs_url="/",
-    redoc_url=None
+    redoc_url=None,
 )
 
 # -----------------------------------------------------------------------------
 # CORS RULES
 # -----------------------------------------------------------------------------
-origins = [
-    "*"
-]
+origins = ["*"]
 
 # Default configuration is to ALLOW ALL from EVERYWHERE. You might want to
 # restrict this.
@@ -36,13 +34,7 @@ app.add_middleware(
 
 # This is required to temporary save code and state in the session
 # during authorization with w3id
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=get_context().middleware_key
-)
+app.add_middleware(SessionMiddleware, secret_key=get_context().middleware_key)
 
 # Members Router Inclusion
-app.include_router(
-    members_router,
-    prefix=f"/api/{get_context().api_version}"
-)
+app.include_router(members_router, prefix=f"/api/{get_context().api_version}")
