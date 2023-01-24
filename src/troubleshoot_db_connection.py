@@ -8,10 +8,8 @@ def main():
     server_context: ServerContext = get_context()
     print(server_context.database_with_tls)
     mongo_db: database = server_context.database
-    test_collection = mongo_db['test-collection']
-    print(str(test_collection.insert_one({
-        "name": "Janice Smith"
-    })))
+    test_collection = mongo_db["test-collection"]
+    print(str(test_collection.insert_one({"name": "Janice Smith"})))
 
 
 if __name__ == "__main__":
