@@ -4,6 +4,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.context import get_context
 from app.resources.members.endpoints import router as members_router
 
+
 # -----------------------------------------------------------------------------
 # Instance of FastAPI Application
 # -----------------------------------------------------------------------------
@@ -43,5 +44,5 @@ app.add_middleware(
 # Members Router Inclusion
 app.include_router(
     members_router,
-    prefix=f"/api/{get_context().as_str('API_VERSION')}"
+    prefix=f"/api/{get_context().api_version}"
 )
