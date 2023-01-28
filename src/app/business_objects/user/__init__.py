@@ -73,4 +73,44 @@ class User(BaseModel):
         return claim in self.claims
 
 
+# =========================================================
+# CLASS ONLINE USER
+# =========================================================
+class UserSession(BaseModel):
+    """
+    Represents the session of an authenticated user
+    """
+
+    sub: str = Field(
+        None,
+        title=''
+    )
+    desc: str = Field(
+        None,
+        title=''
+    )
+    claims: List[str] = Field(
+        None,
+        title=''
+    )
+    exp: int = Field(
+        None,
+        title='Expiration of the session in Unix time'
+    )
+
+    # -----------------------------------------------------
+    # METHOD CAN
+    # -----------------------------------------------------
+    def can(self, claim: str) -> bool:
+        """
+        Validates if a particular claim is associated with
+        given user
+        :param claim: The claim to be verified
+        :return: True is the user has the claim. False if the
+        user does not have the claim
+        """
+        return claim in self.claims
+
+
+
 
