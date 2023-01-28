@@ -12,7 +12,7 @@ class Members(EntityRepository):
     # -----------------------------------------------------
     def __init__(self):
         super().__init__(
-            collection_name='users'
+            collection_name='members'
         )
 
     # -----------------------------------------------------

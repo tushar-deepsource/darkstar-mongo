@@ -1,6 +1,10 @@
 fastapi
+itsdangerous
+python-jose
+cryptography
+Authlib
 pymongo
 rich
 confite
 requests
-jira
+pynacl

@@ -15,8 +15,8 @@ class BusinessOperation:
     # -----------------------------------------------------
     # PROPERTY OPERATION RESULT
     # -----------------------------------------------------
-    @abstractmethod
     @property
+    @abstractmethod
     def operation_result(self) -> any:
         pass
 
