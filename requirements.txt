@@ -8,3 +8,7 @@ rich
 confite
 requests
 pynacl
+starlette
+pydantic
+python-dotenv
+urllib3
