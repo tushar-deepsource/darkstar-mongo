@@ -1,7 +1,10 @@
+import datetime
+from abc import ABCMeta, abstractmethod
+
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import HTTPException, Depends, status
 
-from app.business_objects.user import Users, UserSession
+from app.business_objects.user import Users, UserSession, User
 from app.security import IdentityCredential
 from app.security.cryptography import Password
 from app.context import get_context, ServerContext
@@ -12,6 +15,52 @@ from jose import jwt, JWTError
 oauth2_schema = OAuth2PasswordBearer(
     tokenUrl=f"/api/{get_context().api_version}/auth/token"
 )
+
+
+# ---------------------------------------------------------
+# CLASS TOKEN EXPIRATION PROVIDER
+# ---------------------------------------------------------
+class TokenExpirationProvider:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def get_expiration_time(self):
+        raise NotImplementedError()
+
+
+# ---------------------------------------------------------
+# CLASS INTERNAL TOKEN EXPIRATION PROVIDER
+# ---------------------------------------------------------
+class InternalTokenExpirationProvider(TokenExpirationProvider):
+
+    # -----------------------------------------------------
+    # CONSTRUCTOR METHOD
+    # -----------------------------------------------------
+    def __init__(
+            self,
+            server_context: ServerContext = get_context()
+    ):
+        """
+        Creates instances of al internal token expiration
+        provider
+        :param server_context: The server context to access
+        token settings
+        """
+        self.context: ServerContext = server_context
+
+    # -----------------------------------------------------
+    # METHOD GET EXPIRATION TIME
+    # -----------------------------------------------------
+    def get_expiration_time(self):
+        """
+        Computes the expiration time based on current local
+        time by adding the defined time delta in minutes that
+        is configures in the server context.
+        :return:  Unix time when the token will expire
+        """
+        return datetime.datetime.now() + datetime.timedelta(
+            minutes=self.context.jwt_token_duration
+        )
 
 
 # ---------------------------------------------------------
@@ -32,12 +81,18 @@ class UserAuthentication:
             self,
             username: str,
             password: str,
-            users: Users = inject_users()
+            users: Users = inject_users(),
+            token_expiration_provider: TokenExpirationProvider =
+            InternalTokenExpirationProvider(),
+            context: ServerContext = get_context()
     ):
         self.username: str = username
         self.password: str = password
         self.users: Users = users
-        self.user_data: dict or None = self.__user_data
+        self.user_data: User = User(**self.__user_data)
+        self.context: ServerContext = context
+        self.token_expiration_provider: TokenExpirationProvider = \
+            token_expiration_provider
 
     # -----------------------------------------------------
     # DESTRUCTOR METHOD
@@ -62,9 +117,11 @@ class UserAuthentication:
         users' repository.
         :return: Dict
         """
-        return self.users.get_by_username(
+        user_data: dict = self.users.get_by_username(
             self.username
         )
+        user_data['_id'] = str(user_data['_id'])
+        return user_data
 
     # -----------------------------------------------------
     # VERIFY PASSWORD
@@ -98,7 +155,29 @@ class UserAuthentication:
     # -----------------------------------------------------
     @property
     def is_valid(self) -> bool:
-        return False
+        return self.__verify_password(
+            password=self.password,
+            password_hash=self.user_data.phash,
+            salt=self.user_data.salt
+        )
+
+    # -----------------------------------------------------
+    # PROPERTY JWT ACCESS TOKEN
+    # -----------------------------------------------------
+    @property
+    def jwt_access_token(self) -> str:
+        if self.is_valid:
+            to_encode: dict = self.user_data.session\
+                .dict()\
+                .copy()
+            to_encode['exp'] = self.token_expiration_provider\
+                .get_expiration_time()
+            return jwt.encode(
+                claims=to_encode,
+                key=self.context.jwt_key,
+                algorithm=self.context.jwt_signing_algorithm
+            )
+        raise get_credentials_exception()
 
 
 # ---------------------------------------------------------

@@ -47,6 +47,11 @@ class User(BaseModel):
         title="Last name of the user"
     )
 
+    email: str = Field(
+        None,
+        title="Email of the user"
+    )
+
     disabled: bool = Field(
         True,
         title="Weather the user is disabled or not. Disabled by default"
@@ -72,6 +77,18 @@ class User(BaseModel):
         """
         return claim in self.claims
 
+    # -----------------------------------------------------
+    # PROPERTY SESSION
+    # -----------------------------------------------------
+    @property
+    def session(self):
+        return UserSession(
+            sub=self.uid,
+            desc=f"{self.name} {self.last_name}",
+            email=self.email,
+            claims=self.claims
+        )
+
 
 # =========================================================
 # CLASS ONLINE USER
@@ -83,17 +100,21 @@ class UserSession(BaseModel):
 
     sub: str = Field(
         None,
-        title=''
+        title='Unique identifier of the user'
     )
     desc: str = Field(
         None,
-        title=''
+        title='First name and lastname'
+    )
+    email: str = Field(
+        None,
+        title='Email of the user'
     )
     claims: List[str] = Field(
         None,
-        title=''
+        title='User claims'
     )
-    exp: int = Field(
+    exp: Optional[int] = Field(
         None,
         title='Expiration of the session in Unix time'
     )

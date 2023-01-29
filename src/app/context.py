@@ -178,6 +178,13 @@ class ServerContext(Confite):
     def jwt_signing_algorithm(self) -> str:
         return self.as_str('JWT_SIGN_ALGORITHM')
 
+    # -----------------------------------------------------
+    # PROPERTY JWT TOKEN DURATION
+    # -----------------------------------------------------
+    @property
+    def jwt_token_duration(self) -> int:
+        return self.as_int('JWT_TOKEN_DURATION_IN_MINUTES')
+
 
 # ---------------------------------------------------------
 # METHOD GET SETTINGS
@@ -203,6 +210,7 @@ def get_context() -> ServerContext:
             "QUERY_LIMIT",
             "LOG_LEVEL",
             "JWT_SECRET_KEY",
-            "JWT_SIGN_ALGORITHM"
+            "JWT_SIGN_ALGORITHM",
+            "JWT_TOKEN_DURATION_IN_MINUTES"
         ]
     )
