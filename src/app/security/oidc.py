@@ -44,7 +44,7 @@ def get_oauth() -> OAuth:
     provider = OAuth()
     config = get_context()
     provider.register(
-        name="authentik",
+        name="oidc_provider",
         server_metadata_url=get_context().oidc_discovery_endpoint,
         client_id=get_context().oidc_client_id,
         client_secret=get_context().oidc_client_secret,

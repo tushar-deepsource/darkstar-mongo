@@ -162,14 +162,25 @@ class UserAuthentication:
         )
 
     # -----------------------------------------------------
+    # METHOD SERIALIZE SESSION TO DICT
+    # -----------------------------------------------------
+    def __serialize_session_to_dict(self) -> dict:
+        return self.user_data.session\
+                .dict()\
+                .copy()
+
+    # -----------------------------------------------------
+    # METHOD APPEND EXPIRATION
+    # -----------------------------------------------------
+    def __append_expiration(self, session_dict: dict) -> dict:
+        output: dict = session_dict.copy()
+    # -----------------------------------------------------
     # PROPERTY JWT ACCESS TOKEN
     # -----------------------------------------------------
     @property
     def jwt_access_token(self) -> str:
         if self.is_valid:
-            to_encode: dict = self.user_data.session\
-                .dict()\
-                .copy()
+            to_encode: dict = self.__serialize_session_to_dict()
             to_encode['exp'] = self.token_expiration_provider\
                 .get_expiration_time()
             return jwt.encode(
