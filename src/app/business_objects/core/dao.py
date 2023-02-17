@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABCMeta
 from typing import List, Dict
 
+from fastapi import HTTPException, status
 from pymongo.errors import (
     AutoReconnect,
     BulkWriteError,
@@ -43,66 +44,48 @@ def inject_mongodb_error_handling(func):
     def error_handling_wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-
         except IndexError as ie:
-            print("Error ID: 1")
-            logging.error("Unable to find document")
             logging.error(str(ie))
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND
+            )
         except NetworkTimeout as nt:
-            print("Error ID: 2")
             logging.error(str(nt))
         except AutoReconnect as ar:
-            print("Error ID: 3")
             logging.error(str(ar))
         except BulkWriteError as bwe:
-            print("Error ID: 4")
             if bwe.timeout:
                 logging.error(str(bwe))
             logging.error(str(bwe))
         except CollectionInvalid as collection_invalid_error:
-            print("Error ID: 5")
             logging.error(str(collection_invalid_error))
         except InvalidURI as invalid_url_error:
-            print("Error ID: 6")
             logging.error(str(invalid_url_error))
         except ConfigurationError as configuration_error:
-            print("Error ID: 7")
             logging.error(str(configuration_error))
         except ConnectionFailure as connection_failure_error:
-            print("Error ID: 8")
             logging.error(str(connection_failure_error))
         except CursorNotFound as cursor_not_found_error:
-            print("Error ID: 9")
             logging.error(str(cursor_not_found_error))
         except DocumentTooLarge as document_too_large_error:
-            print("Error ID: 10")
             logging.error(str(document_too_large_error))
         except DuplicateKeyError as duplicated_key_error:
-            print("Error ID: 11")
             logging.error(str(duplicated_key_error))
         except EncryptionError as ece:
-            print("Error ID: 12")
             logging.error(str(ece.cause))
         except ExecutionTimeout as timeout_error:
-            print("Error ID: 13")
             logging.error(str(timeout_error))
         except InvalidName as invalid_name_error:
-            print("Error ID: 14")
             logging.error(str(invalid_name_error))
         except InvalidOperation as invalid_operation_error:
-            print("Error ID: 15")
             logging.error(str(invalid_operation_error))
         except PyMongoError as pymongo_error:
-            print("Error ID: 16")
             logging.error(str(pymongo_error))
         except WriteConcernError as write_concern_error:
-            print("Error ID: 17")
             logging.error(str(write_concern_error))
         except WriteError as write_error:
-            print("Error ID: 18")
             logging.error(str(write_error))
         except Exception as error:
-            print(f"Error ID: 19 {error}")
             logging.error(str(error))
         return False
 
@@ -190,18 +173,6 @@ class EntityRepository:
         :return: Dict if entity exists or None if not found
         """
         return self.get({"id": issue_id}).pop()
-
-    # -----------------------------------------------------
-    # METHOD GET BY JIRA ID
-    # -----------------------------------------------------
-    @inject_mongodb_error_handling
-    def get_by_jira_id(self, jira_id: str) -> Dict or None:
-        """
-        Finds an entity with a Matching Jira identifier
-        :param jira_id:
-        :return:
-        """
-        return self.get({"jira_id": jira_id}).pop()
 
     # -----------------------------------------------------
     # METHOD UPDATE ONE

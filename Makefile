@@ -41,6 +41,10 @@ run:
 stop:
 	docker stop heimdall_api
 
+keys:
+	@echo "Generating new random value for JWT_SECRET_KEY"
+	openssl rand -base64 20
+
 docker-clean:
 	docker rm heimdall_api
 	docker rmi heimdall_api_image

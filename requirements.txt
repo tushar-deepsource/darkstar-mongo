@@ -1,6 +1,14 @@
 fastapi
+itsdangerous
+python-jose
+cryptography
+Authlib
 pymongo
 rich
 confite
 requests
-jira
+pynacl
+starlette
+pydantic
+python-dotenv
+urllib3
