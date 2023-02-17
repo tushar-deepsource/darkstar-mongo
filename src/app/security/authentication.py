@@ -172,8 +172,10 @@ class UserAuthentication:
     # -----------------------------------------------------
     # METHOD APPEND EXPIRATION
     # -----------------------------------------------------
-    def __append_expiration(self, session_dict: dict) -> dict:
+    @staticmethod
+    def __append_expiration(session_dict: dict) -> dict:
         output: dict = session_dict.copy()
+
     # -----------------------------------------------------
     # PROPERTY JWT ACCESS TOKEN
     # -----------------------------------------------------
