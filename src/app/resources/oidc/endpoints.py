@@ -26,4 +26,3 @@ async def oidc_callback(request: Request):
     :param request:
     :return:
     """
-    pass
